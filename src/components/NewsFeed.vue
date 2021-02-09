@@ -1,22 +1,11 @@
 <template>
   <div>
-    <b-container class="newsfeed_toolbar">
+    <b-container class="newsfeed_toolbar" fluid="sm">
       <b-button-toolbar>
         <b-button-group size="sm"
                         class="mr-1">
           <b-button @click="openModalFormCreate">Create New</b-button>
         </b-button-group>
-        <b-button-group size="sm"
-                        class="mr-1">
-          <b-button @click="ADD_DEMODATA()"
-                    v-if="isEmpty">Add demo-data</b-button>
-        </b-button-group>
-        <b-input-group size="sm">
-          <b-form-input size="sm"
-                        class="mr-sm-2"
-                        v-model="searchString"
-                        placeholder="Search"></b-form-input>
-        </b-input-group>
         <div>
           <b-dropdown size="sm"
                       class="mr-1"
@@ -25,11 +14,27 @@
                                     v-for="sortOption in sortOptions"
                                     :key="sortOption.propName">{{sortOption.displayText}}</b-dropdown-item-button>
           </b-dropdown>
-          <b-icon-arrow-up v-if="sort_ascending"
-                           @click="SORT_ORDER(false)"></b-icon-arrow-up>
-          <b-icon-arrow-down v-if="!sort_ascending"
-                             @click="SORT_ORDER(true)"></b-icon-arrow-down>
+          <b-button @click="SORT_ORDER(false)"
+                    v-if="sort_ascending"
+                    variant="link"
+                    size="sm">
+            <b-icon-arrow-up></b-icon-arrow-up>
+          </b-button>
+          <b-button @click="SORT_ORDER(true)"
+                    v-if="!sort_ascending"
+                    variant="link"
+                    size="sm">
+            <b-icon-arrow-down></b-icon-arrow-down>
+          </b-button>
         </div>
+      </b-button-toolbar>
+      <b-button-toolbar class="search">
+        <b-input-group size="sm">
+          <b-form-input size="sm"
+                        class="mr-sm-2"
+                        v-model="searchString"
+                        placeholder="Search"></b-form-input>
+        </b-input-group>
       </b-button-toolbar>
     </b-container>
     <b-container fluid="sm">
@@ -41,6 +46,14 @@
                         :edit-func="openModalFormEdit"/>
         </b-col>
       </b-row>
+      <div v-if="items.length <= 0">
+        <h4>Nothing to be shown.. want me to add some demo data?</h4>
+        <b-button-group size="sm"
+                        class="mr-1">
+          <b-button @click="ADD_DEMODATA()"
+                    v-if="isEmpty">Yes!</b-button>
+        </b-button-group>
+      </div>
     </b-container>
     <b-modal id="modalCreateEdit"
              size="lg"
@@ -173,7 +186,13 @@ export default {
   .row, .newsfeed_toolbar {
     margin-bottom: 15px;
   }
+  .search {
+    margin-top: 15px;
+  }
+  .search > .input-group.input-group-sm {
+    width: 100%;
+  }
   .btn-toolbar {
-    justify-content: space-between;
+    /*justify-content: space-between;*/
   }
 </style>
